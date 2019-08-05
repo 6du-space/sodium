@@ -15,6 +15,7 @@ test 'sign', ~>
 
 test 'hash', ~>
   h1 = sodium.hash(Buffer.from(\1))
-  h2 = sodium.hash(Buffer.from(\1))
+  hasher = sodium.hasher()
+  hasher.update Buffer.from(\1)
+  h2 = hasher.end!
   expect(h1).toEqual(h2)
-  console.log h1

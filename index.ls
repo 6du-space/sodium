@@ -2,6 +2,15 @@ require! {
   \sodium-native : sodium
 }
 
+class Hasher
+  (@_)->
+  update:(msg)->
+    @_.update msg
+  end:->
+    h = Buffer.allocUnsafe(32)
+    @_.final(h)
+    return h
+
 module.exports = {
   pksk:!~>
     pk = Buffer.allocUnsafe(sodium.crypto_sign_PUBLICKEYBYTES)
@@ -27,4 +36,9 @@ module.exports = {
     h = Buffer.allocUnsafe(32)
     sodium.crypto_generichash(h, msg)
     return h
+  hasher:~>
+    new Hasher(
+      sodium.crypto_generichash_instance()
+    )
+  Hasher
 }
