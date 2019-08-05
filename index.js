@@ -1,6 +1,6 @@
 (function(){
   var sodium, Hasher, sign, verify, hash;
-  sodium = require('sodium-native');
+  sodium = require('sodium-universal');
   Hasher = (function(){
     Hasher.displayName = 'Hasher';
     var prototype = Hasher.prototype, constructor = Hasher;
