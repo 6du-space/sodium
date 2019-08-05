@@ -40,7 +40,7 @@ module.exports = {
   sign
   verify
   hash
-  hash_sign:(sk, msg)!~>
+  hash_sign:(sk, msg)~>
     sign(sk, hash(msg))
 
   hasher:~>
