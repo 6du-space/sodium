@@ -1,6 +1,23 @@
 (function(){
-  var sodium;
+  var sodium, Hasher;
   sodium = require('sodium-native');
+  Hasher = (function(){
+    Hasher.displayName = 'Hasher';
+    var prototype = Hasher.prototype, constructor = Hasher;
+    function Hasher(_){
+      this._ = _;
+    }
+    Hasher.prototype.update = function(msg){
+      return this._.update(msg);
+    };
+    Hasher.prototype.end = function(){
+      var h;
+      h = Buffer.allocUnsafe(32);
+      this._.final(h);
+      return h;
+    };
+    return Hasher;
+  }());
   module.exports = {
     pksk: function(){
       var pk, sk, seed;
@@ -23,6 +40,16 @@
       if (sodium.crypto_sign_open(msg, signed, pk)) {
         return msg;
       }
-    }
+    },
+    hash: function(msg){
+      var h;
+      h = Buffer.allocUnsafe(32);
+      sodium.crypto_generichash(h, msg);
+      return h;
+    },
+    hasher: function(){
+      return new Hasher(sodium.crypto_generichash_instance());
+    },
+    Hasher: Hasher
   };
 }).call(this);
