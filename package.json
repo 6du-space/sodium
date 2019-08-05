@@ -7,6 +7,7 @@
   "author": "6du",
   "license": "MPL-2.0",
   "scripts": {
+    "test": "jest",
     "dev": "npx nodemon -r livescript-transform-implicit-async/register -e ls,js index.ls",
     "prepublish": "npx lsc --no-header -r livescript-transform-implicit-async/register -c index.ls"
   },
@@ -18,6 +19,20 @@
     "livescript": "^1.6.0",
     "livescript-system": "^1.0.1",
     "livescript-transform-implicit-async": "^1.1.0",
+    "mocha": "^6.2.0",
     "nodemon": "^1.19.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ls"
+    ],
+    "transform": {
+      ".ls$": "./preprocessor.js"
+    },
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jl]s",
+      "**/__tests__/**/*.[lj]s"
+    ]
   }
 }
