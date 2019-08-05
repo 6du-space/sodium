@@ -13,4 +13,8 @@ test 'sign', ~>
   verify = sodium.verify(pk2, sigined)
   expect(verify).toEqual(undefined)
 
-
+test 'hash', ~>
+  h1 = sodium.hash(Buffer.from(\1))
+  h2 = sodium.hash(Buffer.from(\1))
+  expect(h1).toEqual(h2)
+  console.log h1

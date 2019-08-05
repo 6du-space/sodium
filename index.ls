@@ -22,4 +22,9 @@ module.exports = {
     )
     if sodium.crypto_sign_open(msg, signed, pk)
       return msg
+
+  hash:(msg)!~>
+    h = Buffer.allocUnsafe(32)
+    sodium.crypto_generichash(h, msg)
+    return h
 }
