@@ -1,5 +1,5 @@
 (function(){
-  var sodium, Hasher;
+  var sodium, Hasher, sign, verify, hash;
   sodium = require('sodium-native');
   Hasher = (function(){
     Hasher.displayName = 'Hasher';
@@ -18,6 +18,25 @@
     };
     return Hasher;
   }());
+  sign = function(sk, msg){
+    var signed;
+    signed = Buffer.allocUnsafe(sodium.crypto_sign_BYTES + msg.length);
+    sodium.crypto_sign(signed, msg, sk);
+    return signed;
+  };
+  verify = function(pk, signed){
+    var msg;
+    msg = Buffer.allocUnsafe(signed.length - sodium.crypto_sign_BYTES);
+    if (sodium.crypto_sign_open(msg, signed, pk)) {
+      return msg;
+    }
+  };
+  hash = function(msg){
+    var h;
+    h = Buffer.allocUnsafe(32);
+    sodium.crypto_generichash(h, msg);
+    return h;
+  };
   module.exports = {
     pksk: function(){
       var pk, sk, seed;
@@ -28,24 +47,11 @@
       sodium.crypto_sign_seed_keypair(pk, sk, seed);
       return [pk, sk];
     },
-    sign: function(sk, msg){
-      var signed;
-      signed = Buffer.allocUnsafe(sodium.crypto_sign_BYTES + msg.length);
-      sodium.crypto_sign(signed, msg, sk);
-      return signed;
-    },
-    verify: function(pk, signed){
-      var msg;
-      msg = Buffer.allocUnsafe(signed.length - sodium.crypto_sign_BYTES);
-      if (sodium.crypto_sign_open(msg, signed, pk)) {
-        return msg;
-      }
-    },
-    hash: function(msg){
-      var h;
-      h = Buffer.allocUnsafe(32);
-      sodium.crypto_generichash(h, msg);
-      return h;
+    sign: sign,
+    verify: verify,
+    hash: hash,
+    hash_sign: function(sk, msg){
+      return sign(sk, hash(msg));
     },
     hasher: function(){
       return new Hasher(sodium.crypto_generichash_instance());

@@ -1,5 +1,5 @@
 require! {
-  \sodium-native : sodium
+  \sodium-universal : sodium
 }
 
 class Hasher
