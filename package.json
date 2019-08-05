@@ -1,0 +1,23 @@
+{
+  "name": "sodium-6du",
+  "version": "0.0.1",
+  "description": "Blog framework for next generation Internet",
+  "main": "index.js",
+  "repository": "git@github.com:6du-space/sodium.git",
+  "author": "6du",
+  "license": "MPL-2.0",
+  "scripts": {
+    "dev": "npx nodemon -r livescript-transform-implicit-async/register -e ls,js index.ls",
+    "prepublish": "npx lsc --no-header -r livescript-transform-implicit-async/register -c index.ls"
+  },
+  "dependencies": {
+    "config-6du": "^0.0.7",
+    "sodium-native": "^2.4.3"
+  },
+  "devDependencies": {
+    "livescript": "^1.6.0",
+    "livescript-system": "^1.0.1",
+    "livescript-transform-implicit-async": "^1.1.0",
+    "nodemon": "^1.19.1"
+  }
+}
