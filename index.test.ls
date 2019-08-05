@@ -9,7 +9,8 @@ test 'sign', ~>
   msg = Buffer.from \test
   sigined = sodium.sign(sk1, msg)
   verify = sodium.verify(pk1, sigined)
-  console.log verify, msg
   expect(verify).toEqual(msg)
+  verify = sodium.verify(pk2, sigined)
+  expect(verify).toEqual(undefined)
 
 
