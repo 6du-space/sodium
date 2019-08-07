@@ -55,12 +55,12 @@ module.exports = {
   hasher:~>
     new Hasher()
 
-  hash_file:(filepath)~>
+  hash_path:(filepath)~>
     new Promise(
       (resolve, reject)!~>
         fd = fs.createReadStream(filepath)
         h = new Hasher()
-        fd.on \data , h.update.bind(h) 
+        fd.on \data , h.update.bind(h)
         fd.on "end", !~>
             resolve h.end!
     )
