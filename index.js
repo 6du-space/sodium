@@ -5,15 +5,16 @@
   Hasher = (function(){
     Hasher.displayName = 'Hasher';
     var prototype = Hasher.prototype, constructor = Hasher;
-    function Hasher(){
-      this._ = sodium.crypto_generichash_instance();
+    function Hasher(len){
+      this.len = len != null ? len : 64;
+      this._ = sodium.crypto_generichash_instance(null, this.len);
     }
     Hasher.prototype.update = function(msg){
       return this._.update(msg);
     };
     Hasher.prototype.end = function(){
       var h;
-      h = Buffer.allocUnsafe(32);
+      h = Buffer.allocUnsafe(this.len);
       this._.final(h);
       return h;
     };

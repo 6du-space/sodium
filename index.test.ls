@@ -19,13 +19,14 @@ test 'sign', !~>
 
 test 'hash', !~>
   h1 = sodium.hash(Buffer.from(\1))
+  expect(h1.toString('hex')).toEqual('92cdf578c47085a5992256f0dcf97d0b19f1f1c9de4d5fe30c3ace6191b6e5db')
   hasher = sodium.hasher()
   hasher.update Buffer.from(\1)
   h2 = hasher.end!
   expect(h1).toEqual(h2)
 
-test 'hash_file', !~>
+
+test 'hash_path', !~>
   file = "~/.bashrc"
   package_json = path.join __dirname, 'package.json'
-  hash = await sodium.hash_file(package_json)
-  console.log hash
+  hash = await sodium.hash_path(package_json)

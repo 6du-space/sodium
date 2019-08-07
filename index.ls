@@ -6,14 +6,14 @@ require! <[
 ]>
 
 class Hasher
-  ->
-    @_ = sodium.crypto_generichash_instance()
+  (@len=sodium.crypto_generichash_BYTES)->
+    @_ = sodium.crypto_generichash_instance(null, @len)
 
   update:(msg)->
     @_.update msg
 
   end:->
-    h = Buffer.allocUnsafe(32)
+    h = Buffer.allocUnsafe(@len)
     @_.final(h)
     return h
 
@@ -29,8 +29,8 @@ verify = (pk, signed)!~>
   if sodium.crypto_sign_open(msg, signed, pk)
     return msg
 
-hash = (msg)!~>
-  h = Buffer.allocUnsafe(32)
+hash = (msg, len=sodium.crypto_generichash_BYTES)!~>
+  h = Buffer.allocUnsafe(len)
   sodium.crypto_generichash(h, msg)
   return h
 
