@@ -1,11 +1,12 @@
 (function(){
-  var sodium, Hasher, sign, verify, hash;
+  var sodium, fs, Hasher, sign, verify, hash;
   sodium = require('sodium-universal');
+  fs = require('fs');
   Hasher = (function(){
     Hasher.displayName = 'Hasher';
     var prototype = Hasher.prototype, constructor = Hasher;
-    function Hasher(_){
-      this._ = _;
+    function Hasher(){
+      this._ = sodium.crypto_generichash_instance();
     }
     Hasher.prototype.update = function(msg){
       return this._.update(msg);
@@ -38,6 +39,10 @@
     return h;
   };
   module.exports = {
+    sign: sign,
+    verify: verify,
+    hash: hash,
+    Hasher: Hasher,
     pksk: function(){
       var pk, sk, seed;
       pk = Buffer.allocUnsafe(sodium.crypto_sign_PUBLICKEYBYTES);
@@ -47,16 +52,22 @@
       sodium.crypto_sign_seed_keypair(pk, sk, seed);
       return [pk, sk];
     },
-    sign: sign,
-    verify: verify,
-    hash: hash,
     hash_sign: function(sk, msg){
       return sign(sk, hash(msg));
     },
     hasher: function(){
-      return new Hasher(sodium.crypto_generichash_instance());
+      return new Hasher();
     },
-    hash_file: function(filepath){},
-    Hasher: Hasher
+    hash_path: function(filepath){
+      return new Promise(function(resolve, reject){
+        var fd, h;
+        fd = fs.createReadStream(filepath);
+        h = new Hasher();
+        fd.on('data', h.update.bind(h));
+        fd.on("end", function(){
+          resolve(h.end());
+        });
+      });
+    }
   };
 }).call(this);
