@@ -1,6 +1,6 @@
 {
   "name": "sodium-6du",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Blog framework for next generation Internet",
   "main": "index.js",
   "repository": "git@github.com:6du-space/sodium.git",
@@ -8,6 +8,7 @@
   "license": "MPL-2.0",
   "scripts": {
     "test": "jest",
+    "testing": "jest --watch",
     "dev": "npx nodemon -r livescript-transform-implicit-async/register -e ls,js index.ls",
     "prepublish": "npx lsc --no-header -r livescript-transform-implicit-async/register -c index.ls"
   },

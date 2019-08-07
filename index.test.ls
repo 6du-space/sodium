@@ -1,8 +1,12 @@
+require! <[
+  path
+]>
+
 require! {
   \./index.ls : sodium
 }
 
-test 'sign', ~>
+test 'sign', !~>
   [pk1, sk1] = sodium.pksk()
   [pk2, sk2] = sodium.pksk()
 
@@ -13,9 +17,15 @@ test 'sign', ~>
   verify = sodium.verify(pk2, sigined)
   expect(verify).toEqual(undefined)
 
-test 'hash', ~>
+test 'hash', !~>
   h1 = sodium.hash(Buffer.from(\1))
   hasher = sodium.hasher()
   hasher.update Buffer.from(\1)
   h2 = hasher.end!
   expect(h1).toEqual(h2)
+
+test 'hash_file', !~>
+  file = "~/.bashrc"
+  package_json = path.join __dirname, 'package.json'
+  hash = await sodium.hash_file(package_json)
+  console.log hash

@@ -1,11 +1,17 @@
 require! {
   \sodium-universal : sodium
 }
+require! <[
+  fs
+]>
 
 class Hasher
-  (@_)->
+  ->
+    @_ = sodium.crypto_generichash_instance()
+
   update:(msg)->
     @_.update msg
+
   end:->
     h = Buffer.allocUnsafe(32)
     @_.final(h)
@@ -30,6 +36,11 @@ hash = (msg)!~>
 
 
 module.exports = {
+  sign
+  verify
+  hash
+  Hasher
+
   pksk:!~>
     pk = Buffer.allocUnsafe(sodium.crypto_sign_PUBLICKEYBYTES)
     sk = Buffer.allocUnsafe(sodium.crypto_sign_SECRETKEYBYTES)
@@ -37,15 +48,20 @@ module.exports = {
     sodium.randombytes_buf(seed, sodium.crypto_sign_SEEDBYTES)
     sodium.crypto_sign_seed_keypair(pk, sk, seed)
     return [pk, sk]
-  sign
-  verify
-  hash
+
   hash_sign:(sk, msg)~>
     sign(sk, hash(msg))
 
   hasher:~>
-    new Hasher(
-      sodium.crypto_generichash_instance()
+    new Hasher()
+
+  hash_file:(filepath)~>
+    new Promise(
+      (resolve, reject)!~>
+        fd = fs.createReadStream(filepath)
+        h = new Hasher()
+        fd.on \data , h.update.bind(h) 
+        fd.on "end", !~>
+            resolve h.end!
     )
-  Hasher
 }

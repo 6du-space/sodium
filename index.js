@@ -56,6 +56,7 @@
     hasher: function(){
       return new Hasher(sodium.crypto_generichash_instance());
     },
+    hash_file: function(filepath){},
     Hasher: Hasher
   };
 }).call(this);
