@@ -66,7 +66,7 @@
       return new Promise(function(resolve, reject){
         var fd, h;
         fd = fs.createReadStream(filepath);
-        fd.on('err', reject);
+        fd.on('error', reject);
         h = new Hasher();
         fd.on('data', h.update.bind(h));
         fd.on('end', function(){

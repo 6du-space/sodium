@@ -1,6 +1,6 @@
 {
   "name": "sodium-6du",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Blog framework for next generation Internet",
   "main": "index.js",
   "repository": "git@github.com:6du-space/sodium.git",
