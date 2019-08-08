@@ -64,8 +64,13 @@
     },
     hashPath: function(filepath){
       return new Promise(function(resolve, reject){
-        var fd, h;
-        fd = fs.createReadStream(filepath);
+        var fd, err, h;
+        try {
+          fd = fs.createReadStream(filepath);
+        } catch (e$) {
+          err = e$;
+          reject(err);
+        }
         h = new Hasher();
         fd.on('data', h.update.bind(h));
         fd.on("end", function(){

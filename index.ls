@@ -58,7 +58,10 @@ module.exports = {
   hash-path:(filepath)~>
     new Promise(
       (resolve, reject)!~>
-        fd = fs.createReadStream(filepath)
+        try
+          fd = fs.createReadStream(filepath)
+        catch err
+          reject err
         h = new Hasher()
         fd.on \data , h.update.bind(h)
         fd.on "end", !~>
