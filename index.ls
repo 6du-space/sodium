@@ -6,8 +6,8 @@ require! <[
 ]>
 
 class Hasher
-  (@len=sodium.crypto_generichash_BYTES)->
-    @_ = sodium.crypto_generichash_instance(null, @len)
+  (@len=sodium.crypto_generichash-BYTES)->
+    @_ = sodium.crypto_generichash-instance(null, @len)
 
   update:(msg)->
     @_.update msg
@@ -29,7 +29,7 @@ verify = (pk, signed)!~>
   if sodium.crypto_sign_open(msg, signed, pk)
     return msg
 
-hash = (msg, len=sodium.crypto_generichash_BYTES)!~>
+hash = (msg, len=sodium.crypto_generichash-BYTES)!~>
   h = Buffer.allocUnsafe(len)
   sodium.crypto_generichash(h, msg)
   return h
@@ -49,13 +49,13 @@ module.exports = {
     sodium.crypto_sign_seed_keypair(pk, sk, seed)
     return [pk, sk]
 
-  hash_sign:(sk, msg)~>
+  hash-sign:(sk, msg)~>
     sign(sk, hash(msg))
 
   hasher:~>
     new Hasher()
 
-  hash_path:(filepath)~>
+  hash-path:(filepath)~>
     new Promise(
       (resolve, reject)!~>
         fd = fs.createReadStream(filepath)

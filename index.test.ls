@@ -26,7 +26,7 @@ test 'hash', !~>
   expect(h1).toEqual(h2)
 
 
-test 'hash_path', !~>
+test 'hash-path', !~>
   file = "~/.bashrc"
   package_json = path.join __dirname, 'package.json'
-  hash = await sodium.hash_path(package_json)
+  hash = await sodium.hash-path(package_json)

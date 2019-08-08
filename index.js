@@ -6,8 +6,10 @@
     Hasher.displayName = 'Hasher';
     var prototype = Hasher.prototype, constructor = Hasher;
     function Hasher(len){
-      this.len = len != null ? len : 64;
-      this._ = sodium.crypto_generichash_instance(null, this.len);
+      this.len = len != null
+        ? len
+        : sodium.crypto_generichashBYTES;
+      this._ = sodium.crypto_generichashInstance(null, this.len);
     }
     Hasher.prototype.update = function(msg){
       return this._.update(msg);
@@ -33,9 +35,10 @@
       return msg;
     }
   };
-  hash = function(msg){
+  hash = function(msg, len){
     var h;
-    h = Buffer.allocUnsafe(32);
+    len == null && (len = sodium.crypto_generichashBYTES);
+    h = Buffer.allocUnsafe(len);
     sodium.crypto_generichash(h, msg);
     return h;
   };
@@ -53,13 +56,13 @@
       sodium.crypto_sign_seed_keypair(pk, sk, seed);
       return [pk, sk];
     },
-    hash_sign: function(sk, msg){
+    hashSign: function(sk, msg){
       return sign(sk, hash(msg));
     },
     hasher: function(){
       return new Hasher();
     },
-    hash_path: function(filepath){
+    hashPath: function(filepath){
       return new Promise(function(resolve, reject){
         var fd, h;
         fd = fs.createReadStream(filepath);
