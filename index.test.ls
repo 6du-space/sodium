@@ -27,6 +27,5 @@ test 'hash', !~>
 
 
 test 'hash-path', !~>
-  file = "~/.bashrc"
   package_json = path.join __dirname, 'package.json'
   hash = await sodium.hash-path(package_json)

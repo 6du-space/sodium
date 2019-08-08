@@ -6,8 +6,8 @@ require! <[
 ]>
 
 class Hasher
-  (@len=sodium.crypto_generichash-BYTES)->
-    @_ = sodium.crypto_generichash-instance(null, @len)
+  (@len=sodium.crypto_generichash_BYTES)->
+    @_ = sodium.crypto_generichash_instance(null, @len)
 
   update:(msg)->
     @_.update msg
@@ -29,17 +29,17 @@ verify = (pk, signed)!~>
   if sodium.crypto_sign_open(msg, signed, pk)
     return msg
 
-hash = (msg, len=sodium.crypto_generichash-BYTES)!~>
+hash = (msg, len=sodium.crypto_generichash_BYTES)!~>
   h = Buffer.allocUnsafe(len)
   sodium.crypto_generichash(h, msg)
   return h
 
 
 module.exports = {
-  sign
-  verify
-  hash
   Hasher
+  sign
+  hash
+  verify
 
   pksk:!~>
     pk = Buffer.allocUnsafe(sodium.crypto_sign_PUBLICKEYBYTES)
@@ -64,4 +64,5 @@ module.exports = {
         fd.on "end", !~>
             resolve h.end!
     )
+
 }
