@@ -8,8 +8,8 @@
     function Hasher(len){
       this.len = len != null
         ? len
-        : sodium.crypto_generichashBYTES;
-      this._ = sodium.crypto_generichashInstance(null, this.len);
+        : sodium.crypto_generichash_BYTES;
+      this._ = sodium.crypto_generichash_instance(null, this.len);
     }
     Hasher.prototype.update = function(msg){
       return this._.update(msg);
@@ -37,16 +37,16 @@
   };
   hash = function(msg, len){
     var h;
-    len == null && (len = sodium.crypto_generichashBYTES);
+    len == null && (len = sodium.crypto_generichash_BYTES);
     h = Buffer.allocUnsafe(len);
     sodium.crypto_generichash(h, msg);
     return h;
   };
   module.exports = {
-    sign: sign,
-    verify: verify,
-    hash: hash,
     Hasher: Hasher,
+    sign: sign,
+    hash: hash,
+    verify: verify,
     pksk: function(){
       var pk, sk, seed;
       pk = Buffer.allocUnsafe(sodium.crypto_sign_PUBLICKEYBYTES);
